@@ -90,6 +90,7 @@ def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
     return flask.redirect("/static/index.html")
 
+#Based off: https://github.com/uofa-cmput404/cmput404-slides/blob/master/examples/WebSocketsExamples/chat.py
 def read_ws(ws,client):
     '''A greenlet function that reads from the websocket and updates the world'''
     '''A greenlet function that reads from the websocket'''
@@ -105,6 +106,7 @@ def read_ws(ws,client):
     except:
         '''Done'''
 
+#Based off: https://github.com/uofa-cmput404/cmput404-slides/blob/master/examples/WebSocketsExamples/chat.py
 @sockets.route('/subscribe')
 def subscribe_socket(ws):
     '''Fufill the websocket URL of /subscribe, every update notify the
@@ -136,6 +138,7 @@ def flask_post_json():
     else:
         return json.loads(request.form.keys()[0])
 
+#Copied from assignment 4
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     response_dict = flask_post_json()

@@ -27,7 +27,7 @@
     <canvas id="c" width="100%" height="100%" style="-webkit-tap-highlight-color: transparent;"></canvas> 
 
     <script>
-      // Fix me
+      // Based off: https://github.com/uofa-cmput404/cmput404-slides/blob/master/examples/WebSocketsExamples/static/chat.html
 var canvas = document.getElementById('c');
 var host = window.location.host;
 var context = canvas.getContext("2d");
@@ -55,6 +55,7 @@ function drawCircle(context,entity) {
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
+        context.fill()
         stroke();                                
     }
 }
@@ -125,6 +126,7 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just modified!
+    //Source: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/send
     message = new Object()
     message[entity] = data
     socket.send(JSON.stringify(message));
@@ -234,17 +236,17 @@ mouse = (function() {
 
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
+//Night Themed!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
+    addEntityWithoutName({'x':x,'y':y,'colour':'#800080', 'radius':20});
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'red'});
+    addEntityWithoutName({'x':x,'y':y,'colour':'#8a2be2', 'radius':20});
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'green',
-                          'radius':10});
+    addEntityWithoutName({'x':x,'y':y,'colour':'#191970','radius':10});
 });
 
 
@@ -266,6 +268,7 @@ function wsSetup() {
         try {
             //XXX: TODO What are you going to do here?            
             debug("WebSocket Recv:" + msg.data);
+            //Parse the object, get the key and set that key to our existing world
             myObject = JSON.parse(msg.data)
             let key = Object.keys(myObject)[0];
             world[key] = myObject[key]
